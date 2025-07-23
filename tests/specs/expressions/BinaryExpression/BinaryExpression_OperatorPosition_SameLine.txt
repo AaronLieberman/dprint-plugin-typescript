@@ -54,3 +54,77 @@ const t = this.context.currentGroup &&
 const t = this.context.currentGroup &&
     this.context.currentGroup.name !==
         test;
+
+== should indent equality check when multi-line in array ==
+const t = [
+    this.context.currentGroup &&
+        this.context.currentGroup.name !==
+            test
+];
+
+[expect]
+const t = [
+    this.context.currentGroup &&
+        this.context.currentGroup.name !==
+            test,
+];
+
+== more items ==
+const t = [
+    this.context.currentGroup &&
+        this.context.currentGroup.name !==
+            test,
+    item2,
+];
+
+[expect]
+const t = [
+    this.context.currentGroup &&
+        this.context.currentGroup.name !==
+            test,
+    item2,
+];
+
+== in function call ==
+const t = doWork(
+    this.context.currentGroup &&
+        this.context.currentGroup.name !==
+            test
+);
+
+[expect]
+const t = doWork(
+    this.context.currentGroup &&
+        this.context.currentGroup.name !==
+            test,
+);
+
+== nested arrays ==
+const t = [
+    [
+        this.context.currentGroup &&
+            this.context.currentGroup.name !==
+                test,
+    ]
+];
+
+[expect]
+const t = [
+    [
+        this.context.currentGroup &&
+            this.context.currentGroup.name !==
+                test,
+    ],
+];
+
+== operators and equals ==
+const t = [
+    this.context.currentGroup || this.context.currentGroup.someField !==
+        test || anotherThing,
+];
+
+[expect]
+const t = [
+    this.context.currentGroup || this.context.currentGroup.someField !==
+        test || anotherThing,
+];

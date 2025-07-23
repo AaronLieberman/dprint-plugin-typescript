@@ -2184,7 +2184,12 @@ fn gen_binary_expr<'a>(node: &BinExpr<'a>, context: &mut Context<'a>) -> PrintIt
     } else {
       // get if in an argument
       match parent {
-        Node::ExprOrSpread(expr_or_spread) => !matches!(expr_or_spread.parent().kind(), NodeKind::CallExpr | NodeKind::OptCall | NodeKind::NewExpr),
+        Node::ExprOrSpread(expr_or_spread) => {
+          let grandparent_kind = expr_or_spread.parent().kind();
+          !matches!(grandparent_kind, NodeKind::CallExpr | NodeKind::OptCall | NodeKind::NewExpr)
+            // Logical operators (&&, ||) in arrays should use hanging indentation
+            && !(node.op().is_logical() && grandparent_kind == NodeKind::ArrayLit)
+        }
         _ => true,
       }
     }
